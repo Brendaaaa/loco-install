@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 is_seted () {
     if echo $PACKAGES | grep -q "\b$1\b"; then
        echo 'on'
@@ -11,10 +12,6 @@ is_seted () {
 install_menu () {
 
      packages=$(dialog --checklist "Install Apps" 35 40 35 \
-        'build-essential' 'Build essential' $(is_seted 'build-essential') \
-        'skype' "Cliente de conversas" $(is_seted 'skype') \
-        'latex-full' 'Instalação completa do latex' $(is_seted 'latex-full')\
-#         
         'gcc' '' $(is_seted 'gcc')\
         'texlive-full' 'latex' $(is_seted 'texlive-full')\
         'vim' '' $(is_seted 'vim') \
@@ -53,11 +50,11 @@ install_menu () {
 	'openssh-server' '' $(is_seted 'openssh-server') \
         --stdout)
 
-     # testa se ok foi precionado
+     # testa se ok foi pressionado
      if [ $? = 0 ]; then
          PACKAGES=$packages
      fi
-
+     
      main_menu
 }
 
@@ -117,6 +114,23 @@ config_menu () {
     main_menu
 }
 
+continue_menu (){
+
+    dialog --title "Finalizar..." --yesno "Are you sure you want to .... ?" 6 40
+    
+    response=$?
+    
+    comando='sudo apt-get install '
+    comando=$comando$PACKAGES
+   
+    case $response in
+      0) $comando;;
+      1) main_menu;;
+      255) main_menu;;
+    esac
+    
+}
+
 main_menu () {
 
   entry=$(dialog --title 'LOCO Setup Install (v0.1)' --menu \
@@ -125,7 +139,8 @@ Select an option below using the UP/DOWN keys and SPACE or ENTER.\n
 Alternate keys may also be used: '+', '-', and TAB." \
  18 72 9 \
  'INSTALL' 'Install new applications'\
- 'CONFIGS' 'Reconfigure your Linux system' --stdout) 
+ 'CONFIGS' 'Reconfigure your Linux system' \
+ 'CONTINUE' 'executar mudancaaaaaaaaaas' --stdout) 
 
  case $entry in
     'INSTALL')
@@ -134,6 +149,9 @@ Alternate keys may also be used: '+', '-', and TAB." \
     'CONFIGS')
         config_menu
         ;;
+    'CONTINUE')
+	continue_menu
+	;;
   esac
 }
 
