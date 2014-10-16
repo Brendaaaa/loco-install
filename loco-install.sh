@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Run as root...
+if [[ $UID -ne 0 ]]; then echo "Only root can configurate..." && exit 1; fi
 
 is_seted () {
     if echo $PACKAGES | grep -q "\b$1\b"; then
@@ -94,9 +96,16 @@ internet_config () {
 
     if [ $? = 0 ]; then
         IP=$entry_ip
+        #verificar se eh validoooooooooo
+        if [[ $IP =~ [0-9]{1,3}$ ]]; then
+        [[ ${IP} -le 255 ]]
+        stat=$?
+        echo $stat >> oiiiiiiiii.txt
+    fi
+#     return $stat
     fi
 
-    config_menu
+    main_menu
 }
 
 config_menu () {
@@ -119,12 +128,13 @@ continue_menu (){
     dialog --title "Finalizar..." --yesno "Are you sure you want to .... ?" 6 40
     
     response=$?
-    
-    comando='sudo apt-get install '
-    comando=$comando$PACKAGES
-   
+
     case $response in
-      0) $comando;;
+      0) sudo apt-get update
+         sudo apt-get install $PACKAGES
+	 cd /etc/network/
+	 echo -e "auto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> testeLoco.txt
+	 exit 0;;
       1) main_menu;;
       255) main_menu;;
     esac
