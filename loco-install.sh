@@ -13,7 +13,7 @@ is_seted () {
 
 install_menu () {
 
-     packages=$(dialog --checklist "Install Apps" 35 40 35 \
+     packages=$(dialog --title 'Install Apps' --checklist '' 35 40 35 \
         'gcc' '' $(is_seted 'gcc')\
         'texlive-full' 'latex' $(is_seted 'texlive-full')\
         'vim' '' $(is_seted 'vim') \
@@ -96,12 +96,15 @@ internet_config () {
 
     if [ $? = 0 ]; then
         IP=$entry_ip
-        #verificar se eh validoooooooooo
-        if [[ $IP =~ [0-9]{1,3}$ ]]; then
-        [[ ${IP} -le 255 ]]
-        stat=$?
-        echo $stat >> oiiiiiiiii.txt
-    fi
+        
+        #verificar se eh validoooooooooo falta arrumar quando tem espaco antes do numero....
+        if [[ $IP =~ [0-9]{1,3}$ ]] && [[ ${IP} -le 255 ]]; then
+	    stat=$?
+# 	    echo "ip:$IP e stat:$stat" >> verificacao.txt
+	    return $stat
+	else
+	  dialog --title 'Ops' --msgbox 'Only numbers: [0,255]' 8 30
+	fi
 #     return $stat
     fi
 
@@ -110,7 +113,7 @@ internet_config () {
 
 config_menu () {
 
-    entry=$(dialog --title 'ksjadfka' --menu 'Configurations\nfsdaf\n' 10 30 3\
+    entry=$(dialog --title 'Configuration' --menu '' 10 30 3\
         'Internet' 'Configuration'\
         --stdout) 
 
@@ -123,17 +126,17 @@ config_menu () {
     main_menu
 }
 
-continue_menu (){
+finish_menu (){
 
-    dialog --title "Finalizar..." --yesno "Are you sure you want to .... ?" 6 40
+    dialog --title "Finish" --yesno "Are you sure you want to finish configuring this computer?" 6 40
     
     response=$?
 
     case $response in
-      0) sudo apt-get update
-         sudo apt-get install $PACKAGES
-	 cd /etc/network/
+      0) cd /etc/network/
 	 echo -e "auto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> testeLoco.txt
+	 sudo apt-get update
+         sudo apt-get install $PACKAGES
 	 exit 0;;
       1) main_menu;;
       255) main_menu;;
@@ -144,13 +147,11 @@ continue_menu (){
 main_menu () {
 
   entry=$(dialog --title 'LOCO Setup Install (v0.1)' --menu \
-"Welcome to LOCO Linux Setup.\n
-Select an option below using the UP/DOWN keys and SPACE or ENTER.\n
-Alternate keys may also be used: '+', '-', and TAB." \
- 18 72 9 \
+  "Welcome to LOCO Linux Setup.\nSelect an option below using the UP/DOWN keys and SPACE or ENTER.\n
+   Alternate keys may also be used: '+', '-', and TAB." 18 72 9 \
  'INSTALL' 'Install new applications'\
  'CONFIGS' 'Reconfigure your Linux system' \
- 'CONTINUE' 'executar mudancaaaaaaaaaas' --stdout) 
+ 'FINISH' 'Finish setup' --stdout) 
 
  case $entry in
     'INSTALL')
@@ -159,8 +160,8 @@ Alternate keys may also be used: '+', '-', and TAB." \
     'CONFIGS')
         config_menu
         ;;
-    'CONTINUE')
-	continue_menu
+    'FINISH')
+	finish_menu
 	;;
   esac
 }
