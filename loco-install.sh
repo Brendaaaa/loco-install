@@ -134,7 +134,9 @@ finish_menu (){
 
     case $response in
       0) cd /etc/network/
-	 echo -e "auto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> testeLoco.txt
+	 echo -e "\nauto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> testeLoco.txt
+	 cd ../resolvconf/resolv.conf.d/
+	 echo -e "domain loco.ic.unicamp.br\nsearch loco.ic.unicamp.br\nnameserver 143.106.7.31\nnameserver 143.106.2.5\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n" >> tail.txt
 	 sudo apt-get update
          sudo apt-get install $PACKAGES
 	 exit 0;;
