@@ -11,13 +11,14 @@ is_seted () {
     fi
 }
 
+# 'openjdk-7-jdk openjdk-7-jre' 'java' $(is_seted 'openjdk-7-jdk openjdk-7-jre') \
 install_menu () {
 
      packages=$(dialog --title 'Install Apps' --checklist '' 35 40 35 \
         'gcc' '' $(is_seted 'gcc')\
         'texlive-full' 'latex' $(is_seted 'texlive-full')\
         'vim' '' $(is_seted 'vim') \
-	'gvim' '' $(is_seted 'gvim') \
+	'vim-gtk' '' $(is_seted 'gvim') \
 	'emacs' '' $(is_seted 'emacs') \
 	'g++' '' $(is_seted 'g++') \
 	'make' '' $(is_seted 'make') \
@@ -27,7 +28,7 @@ install_menu () {
 	'ipython' '' $(is_seted 'ipython') \
 	'google-chrome-stable' '' $(is_seted 'google-chrome-stable') \
 	'pidgin' '' $(is_seted 'pidgin') \
-	'mplayer' '' $(is_seted 'mplayer') \
+	'mplayer2' '' $(is_seted 'mplayer') \
 	'guake' '' $(is_seted 'guake') \
 	'yakuake' '' $(is_seted 'yakuake') \
 	'subversion' 'svn' $(is_seted 'subversion') \
@@ -38,9 +39,8 @@ install_menu () {
 	'dropbox' '' $(is_seted 'dropbox') \
 	'clang' '' $(is_seted 'clang') \
 	'zsh' '' $(is_seted 'zsh') \
-	'ctags' '' $(is_seted 'ctags') \
+	'exuberant-ctags' '' $(is_seted 'ctags') \
 	'transmission' '' $(is_seted 'transmission') \
-	'openjdk-7-jdk openjdk-7-jre' 'java' $(is_seted 'openjdk-7-jdk openjdk-7-jre') \
 	'okular' '' $(is_seted 'okular') \
 	'playonlinux' '' $(is_seted 'playonlinux') \
 	'virtualbox' '' $(is_seted 'virtualbox') \
@@ -134,9 +134,9 @@ finish_menu (){
 
     case $response in
       0) cd /etc/network/
-	 echo -e "\nauto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> testeLoco.txt
+	 echo -e "\nauto eth0\niface eth0 inet static\naddress 10.43.21.$IP\nnetmask 255.255.255.0\ngateway 10.43.21.1\n" >> interfaces
 	 cd ../resolvconf/resolv.conf.d/
-	 echo -e "domain loco.ic.unicamp.br\nsearch loco.ic.unicamp.br\nnameserver 143.106.7.31\nnameserver 143.106.2.5\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n" >> tail.txt
+	 echo -e "domain loco.ic.unicamp.br\nsearch loco.ic.unicamp.br\nnameserver 143.106.7.31\nnameserver 143.106.2.5\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n" >> tail
 	 sudo apt-get update
          sudo apt-get install $PACKAGES
 	 exit 0;;
