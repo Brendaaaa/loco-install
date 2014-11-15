@@ -1,7 +1,9 @@
 #!/bin/bash
 
+PACKAGES="GCC LATEX-FULL VIM"
+
 #Run as root...
-if [[ $UID -ne 0 ]]; then echo "Only root can configurate..." && exit 1; fi
+# if [[ $UID -ne 0 ]]; then echo "Only root can configurate..." && exit 1; fi
 
 is_seted () {
     if echo $PACKAGES | grep -q "\b$1\b"; then
@@ -14,50 +16,62 @@ is_seted () {
 # 'openjdk-7-jdk openjdk-7-jre' 'java' $(is_seted 'openjdk-7-jdk openjdk-7-jre') \
 install_menu () {
 
-     packages=$(dialog --title 'Install Apps' --checklist '' 35 40 35 \
-        'gcc' '' $(is_seted 'gcc')\
-        'texlive-full' 'latex' $(is_seted 'texlive-full')\
-        'vim' '' $(is_seted 'vim') \
-	'vim-gtk' '' $(is_seted 'gvim') \
-	'emacs' '' $(is_seted 'emacs') \
-	'g++' '' $(is_seted 'g++') \
-	'make' '' $(is_seted 'make') \
-	'cmake' '' $(is_seted 'cmake') \
-	'automake' '' $(is_seted 'automake') \
-	'python' '' $(is_seted 'python') \
-	'ipython' '' $(is_seted 'ipython') \
-	'google-chrome-stable' '' $(is_seted 'google-chrome-stable') \
-	'pidgin' '' $(is_seted 'pidgin') \
-	'mplayer2' '' $(is_seted 'mplayer') \
-	'guake' '' $(is_seted 'guake') \
-	'yakuake' '' $(is_seted 'yakuake') \
-	'subversion' 'svn' $(is_seted 'subversion') \
-	'git' '' $(is_seted 'git') \
-	'tmux' '' $(is_seted 'tmux') \
-	'gdb' '' $(is_seted 'gdb') \
-	'valgrind' '' $(is_seted 'valgrind') \
-	'dropbox' '' $(is_seted 'dropbox') \
-	'clang' '' $(is_seted 'clang') \
-	'zsh' '' $(is_seted 'zsh') \
-	'exuberant-ctags' '' $(is_seted 'ctags') \
-	'transmission' '' $(is_seted 'transmission') \
-	'okular' '' $(is_seted 'okular') \
-	'playonlinux' '' $(is_seted 'playonlinux') \
-	'virtualbox' '' $(is_seted 'virtualbox') \
-	'htop' '' $(is_seted 'htop') \
-	'tree' '' $(is_seted 'tree') \
-	'rsync' '' $(is_seted 'rsync') \
-	'sshfs' '' $(is_seted 'sshfs') \
-	'meld' '' $(is_seted 'meld') \
-	'openssh-server' '' $(is_seted 'openssh-server') \
-        --stdout)
+     packages=$(dialog --title 'Install Apps' --checklist '' 18 72 9 \
+        'GCC' 'GNU C compiler' $(is_seted 'GCC')\
+        'G++' 'GNU C++ compiler' $(is_seted 'g++') \
+        'LATEX' 'TeX Live: basic packages' $(is_seted 'texlive-full')\
+        'LATEX-FULL' 'TeX Live: all packages' $(is_seted 'LATEX-FULL')\
+        'VIM' 'Vi IMproved - enhanced vi editor' $(is_seted 'VIM') \
+        'GVIM' 'Vi IMproved - enhanced vi editor - with GUI' $(is_seted 'gvim') \
+        'EMACS' 'GNU Emacs editor' $(is_seted 'emacs') \
+        'MAKE' 'Utility for directing compilation' $(is_seted 'make') \
+        'CMAKE' 'Cross-platform, open-source make system' $(is_seted 'cmake') \
+        'AUTOMAKE' 'Tool for generating Makefiles' $(is_seted 'automake') \
+        'PYTHON' 'High-level object-oriented language' $(is_seted 'python') \
+        'IPYTHON' '' $(is_seted 'ipython') \
+        'CHROME' '' $(is_seted 'google-chrome-stable') \
+        'PIDGIN' '' $(is_seted 'pidgin') \
+        'MPLAYER' '' $(is_seted 'mplayer') \
+        'GUAKE' '' $(is_seted 'guake') \
+        'YAKUAKE' '' $(is_seted 'yakuake') \
+        'SUBVERSION' 'svn' $(is_seted 'subversion') \
+        'GIT' '' $(is_seted 'git') \
+        'TMUX' '' $(is_seted 'tmux') \
+        'GDB' '' $(is_seted 'gdb') \
+        'VALGRIND' '' $(is_seted 'valgrind') \
+        'DROPBOX' '' $(is_seted 'dropbox') \
+        'CLANG' '' $(is_seted 'clang') \
+        'ZSH' '' $(is_seted 'zsh') \
+        'CTAGS' '' $(is_seted 'ctags') \
+        'TRANSMISSION' '' $(is_seted 'transmission') \
+        'OKULAR' '' $(is_seted 'okular') \
+        'PLAYONLINUX' '' $(is_seted 'playonlinux') \
+        'VIRTUALBOX' '' $(is_seted 'virtualbox') \
+        'HTOP' '' $(is_seted 'htop') \
+        'TREE' '' $(is_seted 'tree') \
+        'RSYNC' '' $(is_seted 'rsync') \
+        'SSHFS' '' $(is_seted 'sshfs') \
+        'MELD' '' $(is_seted 'meld') \
+        'SSH-SERVER' '' $(is_seted 'openssh-server') \
+            --stdout)
 
      # testa se ok foi pressionado
      if [ $? = 0 ]; then
          PACKAGES=$packages
      fi
      
-     main_menu
+    for opt in ${packages[@]}; do
+        case $opt in
+            'GCC')
+                echo "install gcc"
+                ;;
+            'TREE')
+                echo "installing tree"
+                ;;
+        esac
+    done
+
+    # main_menu
 }
 
 
